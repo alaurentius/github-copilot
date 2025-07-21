@@ -72,4 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
         link.download = 'chart.png';
         link.click();
     });
+
+    document.getElementById('username').addEventListener('input', function () {
+        const username = this.value;
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!regex.test(username)) {
+            this.style.borderColor = 'red';
+        } else {
+            this.style.borderColor = 'green';
+        }
+    });
+
 });
