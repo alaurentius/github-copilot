@@ -1,24 +1,19 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // List of months matching input IDs in index.html
+document.addEventListener('DOMContentLoaded', () => {
     const months = [
         "january", "february", "march", "april", "may", "june",
         "july", "august", "september", "october", "november", "december"
     ];
 
-    // Retrieve values for income or expenses for each month
-    function getMonthlyValues(type) {
-        return months.map(month => {
-            const input = document.getElementById(`${type}-${month}`);
-            return input ? Number(input.value) || 0 : 0;
-        });
-    }
+    const getMonthlyValues = type =>
+        months.map(month =>
+            Number(document.getElementById(`${type}-${month}`)?.value) || 0
+        );
 
-    // Chart.js initialization
     const ctx = document.getElementById('myChart').getContext('2d');
-    let chart = new Chart(ctx, {
+    const chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: months.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+            labels: months.map(m => m[0].toUpperCase() + m.slice(1)),
             datasets: [
                 {
                     label: 'Income',
@@ -40,31 +35,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Update chart when any input changes
     months.forEach(month => {
         ['income', 'expenses'].forEach(type => {
             const input = document.getElementById(`${type}-${month}`);
-            if (input) {
-                input.addEventListener('input', () => {
-                    chart.data.datasets[0].data = getMonthlyValues('income');
-                    chart.data.datasets[1].data = getMonthlyValues('expenses');
-                    chart.update();
-                });
-            }
+            input?.addEventListener('input', () => {
+                chart.data.datasets[0].data = getMonthlyValues('income');
+                chart.data.datasets[1].data = getMonthlyValues('expenses');
+                chart.update();
+            });
         });
     });
 
-    // Update chart when Chart tab is shown
-    const chartTab = document.getElementById('chart-tab');
-    if (chartTab) {
-        chartTab.addEventListener('shown.bs.tab', () => {
-            chart.data.datasets[0].data = getMonthlyValues('income');
-            chart.data.datasets[1].data = getMonthlyValues('expenses');
-            chart.update();
-        });
-    }
+    document.getElementById('chart-tab')?.addEventListener('shown.bs.tab', () => {
+        chart.data.datasets[0].data = getMonthlyValues('income');
+        chart.data.datasets[1].data = getMonthlyValues('expenses');
+        chart.update();
+    });
 
-    document.getElementById('downloadChart').addEventListener('click', function () {
+    document.getElementById('downloadChart')?.addEventListener('click', () => {
         const canvas = document.getElementById('myChart');
         const image = canvas.toDataURL('image/png');
         const link = document.createElement('a');
@@ -73,14 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
         link.click();
     });
 
-    document.getElementById('username').addEventListener('input', function () {
-        const username = this.value;
-        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!regex.test(username)) {
-            this.style.borderColor = 'red';
-        } else {
-            this.style.borderColor = 'green';
-        }
+    document.getElementById('username')?.addEventListener('input', function () {
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&~])[A-Za-z\d@$!%*?&~]{8,}$/;
+        this.style.borderColor = regex.test(this.value) ? 'green' : 'red';
     });
-
 });
