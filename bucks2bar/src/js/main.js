@@ -65,4 +65,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&~])[A-Za-z\d@$!%*?&~]{8,}$/;
         this.style.borderColor = regex.test(this.value) ? 'green' : 'red';
     });
+
+    document.getElementById('send-email')?.addEventListener('click', async () => {
+        const email = document.getElementById('email-address')?.value;
+        const canvas = document.getElementById('myChart');
+        const image = canvas.toDataURL('image/png');
+
+        if (!email) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, image })
+            });
+            const text = await response.text();
+            alert(text);
+        } catch (err) {
+            alert('Failed to send email.');
+        }
+    });
 });
