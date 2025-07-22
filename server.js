@@ -1,6 +1,7 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const app = express();
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 app.use((req, res, next) => {
@@ -10,9 +11,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '5mb' }));
+const emailLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: 'Too many email requests from this IP, please try again later.'
+});
 
-app.post('/send-email', async (req, res) => {
+app.post('/send-email', emailLimiter, async (req, res) => {
   const { email, image } = req.body;
   if (!email || !image) return res.status(400).send('Missing email or image');
 
@@ -20,7 +26,7 @@ app.post('/send-email', async (req, res) => {
 
   const API_KEY = process.env.RESEND_API_KEY;
   const EMAIL = process.env.EMAIL;
-  console.log('Using API Key:', API_KEY);
+
   // Create transporter (use environment variables for credentials in production)
   let transporter = nodemailer.createTransport({
       host: 'smtp.resend.com',
