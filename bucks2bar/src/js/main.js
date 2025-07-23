@@ -1,8 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const months = [
         "january", "february", "march", "april", "may", "june",
         "july", "august", "september", "october", "november", "december"
     ];
+
+    // Fetch dummy data and update inputs
+    try {
+        const response = await fetch('http://localhost:3000/dummy-data');
+        const data = await response.json();
+        months.forEach(month => {
+            const incomeInput = document.getElementById(`income-${month}`);
+            const expensesInput = document.getElementById(`expenses-${month}`);
+            if (incomeInput && expensesInput && data[month]) {
+                incomeInput.value = data[month].income;
+                expensesInput.value = data[month].expenses;
+            }
+        });
+    } catch (err) {
+        console.error('Failed to fetch dummy data:', err);
+    }
 
     const getMonthlyValues = type =>
         months.map(month =>

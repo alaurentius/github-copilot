@@ -61,4 +61,19 @@ app.post('/send-email', emailLimiter, async (req, res) => {
   }
 });
 
+app.get('/dummy-data', (req, res) => {
+  const months = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december"
+  ];
+  const data = {};
+  months.forEach((month, i) => {
+    data[month] = {
+      income: 1000 - i * 50,
+      expenses: 500 + i * 25
+    };
+  });
+  res.json(data);
+});
+
 app.listen(3000, () => console.log('Server running on port 3000'));
