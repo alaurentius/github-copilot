@@ -40,4 +40,32 @@ describe('Username validation regex', () => {
     test('only uppercase letters fails', () => {
         expect(regex.test('ABCDEFGH')).toBe(false);
     });
+
+    test('valid username with multiple special characters passes', () => {
+        expect(regex.test('Abcdef1!@')).toBe(true);
+    });
+
+    test('username with spaces fails', () => {
+        expect(regex.test('Password 1!')).toBe(false);
+    });
+
+    test('username with unsupported special character fails', () => {
+        expect(regex.test('Password1#')).toBe(false); // '#' is not in the allowed set
+    });
+
+    test('username with only allowed special characters passes', () => {
+        expect(regex.test('A1b2c3d~')).toBe(true);
+    });
+
+    test('username with more than 8 characters and all requirements passes', () => {
+        expect(regex.test('Abcdefg1!')).toBe(true);
+    });
+
+    test('username with exactly 8 characters and all requirements passes', () => {
+        expect(regex.test('A1b2c3d@')).toBe(true);
+    });
+
+    test('username with less than 8 characters and all requirements fails', () => {
+        expect(regex.test('A1b@c')).toBe(false);
+    });
 });

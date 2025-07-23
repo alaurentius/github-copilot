@@ -61,10 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
     });
 
-    document.getElementById('username')?.addEventListener('input', function () {
+    /**
+     * Callback function for username input validation.
+     * Validates the input value against a regex that requires:
+     * - At least one uppercase letter
+     * - At least one digit
+     * - At least one special character (@$!%*?&~)
+     * - Minimum length of 8 characters
+     * Sets the input border color to green if valid, red otherwise.
+     *
+     * @this {HTMLInputElement} The input element triggering the callback.
+     */
+    function usernameInputCallback() {
         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&~])[A-Za-z\d@$!%*?&~]{8,}$/;
         this.style.borderColor = regex.test(this.value) ? 'green' : 'red';
-    });
+    }
+    
+    document.getElementById('username')?.addEventListener('input', usernameInputCallback);
 
     document.getElementById('send-email')?.addEventListener('click', async () => {
         const email = document.getElementById('email-address')?.value;
@@ -88,4 +101,5 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Failed to send email.');
         }
     });
+    
 });
