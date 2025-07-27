@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 
+/**
+ * Pagination component for navigating through pages.
+ *
+ * @param {Object} props - Component props.
+ * @param {number} [props.totalItems=5] - Total number of pages/items.
+ * @param {number} [props.currentPage=1] - Currently selected page.
+ * @param {function} props.onPageChange - Callback function called with the new page number when the page changes.
+ *
+ * @returns {JSX.Element} Pagination UI with previous/next buttons and a dropdown for page selection.
+ */
 const Pagination = ({ totalItems = 5, currentPage = 1, onPageChange }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
