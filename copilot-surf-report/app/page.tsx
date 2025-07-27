@@ -17,6 +17,21 @@ export default function Home() {
   const [marineWeather, setMarineWeather] = useState<MarineWeather | null>(null);
   const [marineLoading, setMarineLoading] = useState(false);
   const [marineError, setMarineError] = useState<string | null>(null);
+  // Newsletter form state
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNewsletterLoading(true);
+    setNewsletterStatus(null);
+    // Simulate API call
+    await new Promise(res => setTimeout(res, 1200));
+    setNewsletterLoading(false);
+    setNewsletterStatus("Thank you for signing up!");
+    setNewsletterEmail("");
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,13 +69,43 @@ export default function Home() {
   };
 
   const handleBack = () => {
-    setSelectedLocation(null);
-    setMarineWeather(null);
-    setMarineError(null);
+  setSelectedLocation(null);
+  setMarineWeather(null);
+  setMarineError(null);
   };
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-start py-16 px-4">
+      <Card className="w-full max-w-xl mb-8">
+        <CardHeader>
+          <CardTitle>Sign Up to Our Newsletter</CardTitle>
+          <CardDescription>
+            Get surf reports and marine weather updates delivered to your inbox.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-4">
+            <Input
+              type="email"
+              placeholder="Your email address"
+              value={newsletterEmail}
+              onChange={e => setNewsletterEmail(e.target.value)}
+              required
+              disabled={newsletterLoading}
+            />
+            <button
+              type="submit"
+              className="bg-primary text-primary-foreground rounded-md px-4 py-2 font-medium hover:bg-primary/90 transition-colors"
+              disabled={newsletterLoading || !newsletterEmail}
+            >
+              {newsletterLoading ? "Signing up..." : "Sign Up"}
+            </button>
+            {newsletterStatus && (
+              <div className="text-success text-sm mt-2">{newsletterStatus}</div>
+            )}
+          </form>
+        </CardContent>
+      </Card>
       <Card className="w-full max-w-xl">
         <CardHeader>
           <CardTitle>Marine Weather Search</CardTitle>
