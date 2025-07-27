@@ -4,6 +4,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Register from './Register.jsx'
+import Employees from './Employees.jsx'
 
 function Home() {
   return (
@@ -49,6 +50,7 @@ function App() {
           }
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/employees" element={<Employees />} />
       </Routes>
     </BrowserRouter>
   )
