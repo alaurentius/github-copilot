@@ -17,7 +17,7 @@ const Pagination = ({ totalItems = 5, currentPage = 1, onPageChange }) => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
 
-  const handleNext = () => {
+  const handleNext = () => { 
     if (currentPage < totalItems) onPageChange(currentPage + 1);
   };
 
